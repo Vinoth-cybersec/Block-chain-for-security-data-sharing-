@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract DataSharing {
+    struct Data {
+        string dataHash;
+        address owner;
+        uint timestamp;
+    }
+
+    mapping(address => Data[]) private dataOwners;
+
+    // Event to emit when data is shared
+    event DataShared(address indexed owner, string dataHash, uint timestamp);
+
+    // Function to share data
+    function shareData(string memory dataHash) public {
+        dataOwners[msg.sender].push(Data(dataHash, msg.sender, block.timestamp));
+        emit DataShared(msg.sender, dataHash, block.timestamp);
+    }
+
+    // Function to retrieve all shared data by a user
+    function getSharedData() public view returns (Data[] memory) {
+        return dataOwners[msg.sender];
+    }
+}
